@@ -15,6 +15,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Canvas canvas;
     public JPanel panel;
     public BufferStrategy bufferStrategy;
+    public Image GeoMan;
+    public Image GeoBackground;
+    public Image GeoBase;
+
+    private GeoMan GeoMan1;
 
 
     public static void main(String[] args) {
@@ -24,6 +29,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     public BasicGameApp(){
         setUpGraphics();
+        GeoMan = Toolkit.getDefaultToolkit().getImage("GeoMan.png");
+        GeoMan1= new GeoMan(100,100,GeoMan);
+
+        GeoBackground = Toolkit.getDefaultToolkit().getImage("GeoBackground.png");
+        GeoBase = Toolkit.getDefaultToolkit().getImage("base.png");
         canvas.addKeyListener(this);
         canvas.addMouseListener(this);
     }
@@ -36,9 +46,46 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             pause(20);
         }
     }
+
+
+    private void setUpGraphics() {
+        frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
+
+        panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
+        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
+        panel.setLayout(null);   //set the layout
+
+        // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
+        // and trap input events (Mouse and Keyboard events)
+        canvas = new Canvas();
+        canvas.setBounds(0, 0, WIDTH, HEIGHT);
+        canvas.setIgnoreRepaint(true);
+
+        panel.add(canvas);  // adds the canvas to the panel.
+
+        // frame operations
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
+        frame.pack();  //adjusts the frame and its contents so the sizes are at their default or larger
+        frame.setResizable(false);   //makes it so the frame cannot be resized
+        frame.setVisible(true);      //IMPORTANT!!!  if the frame is not set to visible it will not appear on the screen!
+
+        // sets up things so the screen displays images nicely.
+        canvas.createBufferStrategy(2);
+        bufferStrategy = canvas.getBufferStrategy();
+        canvas.requestFocus();
+        System.out.println("DONE graphic setup");
+    }
+
+
+
     public void render(){
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0,0,WIDTH, HEIGHT);
+        g.drawImage(GeoBackground, 0,0, 1000, 600, null);
+        g.drawImage(GeoBase,0,0,1000,700,null);
+        g.drawImage(GeoMan,GeoMan1.xpos, GeoMan1.ypos, 70,70,null);
+
+
 
 
 
@@ -50,7 +97,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     }
 
     public void moveThings(){
-
+        GeoMan1.move();
     }
 
     public void checkIntersections(){
@@ -65,18 +112,52 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
 
 
-    public void keyTyped(KeyEvent e) {
-
+    public void keyTyped(KeyEvent event) {
     }
 
-    public void keyPressed(KeyEvent e) {
+    @Override
+    public void keyPressed(KeyEvent event) {
+        //This method will do something whenever any key is pressed down.
+        //Put if( ) statements here
+        char key = event.getKeyChar();     //gets the character of the key pressed
+        int keyCode = event.getKeyCode();  //gets the keyCode (an integer) of the key pressed
+        System.out.println("Key Pressed: " + key + "  Code: " + keyCode);
 
+//        if (keyCode == 68) {
+//            GeoMan1.right = true;
+//        }
+//        if (keyCode == 83) {
+//            GeoMan1.down = true;
+//        }
+//        if (keyCode == 65)
+//            GeoMan1.left = true;
+//        if (keyCode == 87){
+//            GeoMan1.up = true;
+//        }
+        if (keyCode == 32){
+            GeoMan1.dy= -(GeoMan1.xpos+30)/(GeoMan1.ypos+30)* GeoMan1.dx;
+
+        }
     }
 
 
-    public void keyReleased(KeyEvent e) {
 
-    }
+    public void keyReleased(KeyEvent event) {
+        char key = event.getKeyChar();
+        int keyCode = event.getKeyCode();
+
+        if (keyCode == 32) {
+//            if (GeoMan1.ypos >= 530-GeoMan1.height){
+//                GeoMan1.dy  = 0;
+//            }else {
+//                GeoMan1.dy = 5;
+//            }
+            System.out.println(GeoMan1.ypos + " DY " +GeoMan1.dy);
+
+        }
+
+}
+
 
 
     public void mouseClicked(MouseEvent e) {
@@ -103,34 +184,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     }
 
-    public void setUpGraphics() {
-        frame = new JFrame("CheeseWorld");   //Create the program window or frame.  Names it.
-
-        panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
-        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
-        panel.setLayout(null);   //set the layout
-
-        // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
-        // and trap input events (Mouse and Keyboard events)
-        canvas = new Canvas();
-        canvas.setBounds(0, 0, WIDTH, HEIGHT);
-        canvas.setIgnoreRepaint(true);
-
-        panel.add(canvas);  // adds the canvas to the panel.
-
-        // frame operations
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //makes the frame close and exit nicely
-        frame.pack();  //adjusts the frame and its contents so the sizes are at their default or larger
-        frame.setResizable(false);   //makes it so the frame cannot be resized
-        frame.setVisible(true);      //IMPORTANT!!!  if the frame is not set to visible it will not appear on the screen!
-
-        // sets up things so the screen displays images nicely.
-        canvas.createBufferStrategy(2);
-        bufferStrategy = canvas.getBufferStrategy();
-        canvas.requestFocus();
-        System.out.println("DONE graphic setup");
-
-    }
 
     //Pauses or sleeps the computer for the amount specified in milliseconds
     public void pause(int time) {
