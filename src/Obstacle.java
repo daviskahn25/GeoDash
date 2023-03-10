@@ -5,12 +5,14 @@ public class Obstacle {
     public Rectangle rec;
     public int width;
     public int height;
-    public int yPos = 505;
+    public int yPos = 550;
     public Obstacle(int pxPos, int plength){
         xPos = pxPos;
-        width = 150;
-        height = 100;
+        width = 50;
+        height = 50;
+        rec = new Rectangle(xPos, yPos, width, height);
     }
+
     public void move(int speed){
         xPos = xPos-speed;
         if(xPos<-200){

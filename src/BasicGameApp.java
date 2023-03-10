@@ -90,26 +90,21 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.clearRect(0,0,WIDTH, HEIGHT);
         g.drawImage(GeoBackground, 0,0, 1000, 600, null);
         g.drawImage(GeoBase,0,0,1000,700,null);
-        g.drawImage(GeoMan,GeoMan1.xpos, GeoMan1.ypos, 70,70,null);
+        g.drawImage(GeoMan,GeoMan1.xpos, GeoMan1.ypos, GeoMan1.width,GeoMan1.height,null);
+
         for (int i = 0; i < obstacles.length; i++) {
-            if(obstacles[i].width == 60){
-                g.drawImage(obstacle,obstacles[i].xPos,obstacles[i].yPos,obstacles[i].width,obstacles[i].height,null);
-            }
-            else{
-                g.drawImage(obstacle,obstacles[i].xPos,obstacles[i].yPos,obstacles[i].width/2,obstacles[i].height,null);
-                g.drawImage(obstacle,obstacles[i].xPos + (obstacles[i].width/2),obstacles[i].yPos,obstacles[i].width/2,obstacles[i].height,null);
-            }
+            g.drawImage(obstacle,obstacles[i].xPos,obstacles[i].yPos,obstacles[i].width,obstacles[i].height,null);
+//            g.drawImage(obstacle,obstacles[i].xPos + (obstacles[i].width/2),obstacles[i].yPos,obstacles[i].width/2,obstacles[i].height,null);
+
+//            g.setColor(Color.YELLOW);
+//            g.drawRect(obstacles[i].rec.x, obstacles[i].rec.y, obstacles[i].rec.width, obstacles[i].rec.height);
 
         }
+
         if (gameOver){
             g.setColor(Color.BLACK);
             g.fillRect(0,0,1000,700);
         }
-
-
-
-
-
 
 
         g.dispose();
@@ -118,7 +113,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     }
 
     public void moveThings(){
-        GeoMan1.move();
+//        GeoMan1.move();
         GeoMan1.move2();
         for (int i = 0; i < obstacles.length; i++) {
             obstacles[i].move(speed);
@@ -132,11 +127,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             }
         }
     }
-
-
-
-
-
 
 
 
@@ -164,11 +154,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 //            GeoMan1.up = true;
 //        }
         if (keyCode == 32){
-            if(GeoMan1.canJump){
-                GeoMan1.dy= -15;
-            }
-
-
+                GeoMan1.dy = -15;
         }
     }
 

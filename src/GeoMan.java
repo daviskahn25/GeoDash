@@ -20,9 +20,9 @@ public class GeoMan {
 
     public GeoMan(int dxParameter, int dyParameter, Image picParameter){
         xpos = 100;
-        ypos = 530;
-        width = 50;
-        height = 50;
+        ypos = 510;
+        width = 70;
+        height = 70;
         dx = 0;
         dy = 0;
         pic = picParameter;
@@ -43,6 +43,7 @@ public class GeoMan {
         if (ypos > 530){
             ypos = 530;
         }
+        rec = new Rectangle(xpos, ypos, width, height);
     }
 
     public void bounce(){
