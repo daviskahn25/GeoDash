@@ -19,11 +19,11 @@ public class GeoMan {
 
 
     public GeoMan(int dxParameter, int dyParameter, Image picParameter){
-        xpos = 20;
+        xpos = 100;
         ypos = 530;
         width = 50;
         height = 50;
-        dx = 5;
+        dx = 0;
         dy = 0;
         pic = picParameter;
         isAlive = true;
@@ -33,6 +33,16 @@ public class GeoMan {
     public void move (){
         xpos = xpos + dx;
         ypos = ypos + dy;
+    }
+    public void move2(){
+        xpos = xpos + dx;
+        ypos = ypos + dy;
+        if (ypos < 530){
+            dy = dy + 1;
+        }
+        if (ypos > 530){
+            ypos = 530;
+        }
     }
 
     public void bounce(){

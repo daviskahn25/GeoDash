@@ -9,6 +9,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     final int WIDTH = 1000;
     final int HEIGHT = 700;
+    public boolean gameOver;
 
 
     public JFrame frame;
@@ -18,8 +19,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public Image GeoMan;
     public Image GeoBackground;
     public Image GeoBase;
+    public Image obstacle;
+    public int speed = 15;
 
     private GeoMan GeoMan1;
+    public Obstacle[] obstacles = new Obstacle[3];
 
 
     public static void main(String[] args) {
@@ -30,8 +34,11 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public BasicGameApp(){
         setUpGraphics();
         GeoMan = Toolkit.getDefaultToolkit().getImage("GeoMan.png");
+        obstacle = Toolkit.getDefaultToolkit().getImage("obstacle.png");
         GeoMan1= new GeoMan(100,100,GeoMan);
-
+        for (int i = 0; i < 3; i++) {
+            obstacles[i] = new Obstacle(i*(int)(Math.random()*500) + 1000,(int)(2*Math.random()) +1);
+        }
         GeoBackground = Toolkit.getDefaultToolkit().getImage("GeoBackground.png");
         GeoBase = Toolkit.getDefaultToolkit().getImage("base.png");
         canvas.addKeyListener(this);
@@ -84,6 +91,20 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.drawImage(GeoBackground, 0,0, 1000, 600, null);
         g.drawImage(GeoBase,0,0,1000,700,null);
         g.drawImage(GeoMan,GeoMan1.xpos, GeoMan1.ypos, 70,70,null);
+        for (int i = 0; i < obstacles.length; i++) {
+            if(obstacles[i].width == 60){
+                g.drawImage(obstacle,obstacles[i].xPos,obstacles[i].yPos,obstacles[i].width,obstacles[i].height,null);
+            }
+            else{
+                g.drawImage(obstacle,obstacles[i].xPos,obstacles[i].yPos,obstacles[i].width/2,obstacles[i].height,null);
+                g.drawImage(obstacle,obstacles[i].xPos + (obstacles[i].width/2),obstacles[i].yPos,obstacles[i].width/2,obstacles[i].height,null);
+            }
+
+        }
+        if (gameOver){
+            g.setColor(Color.BLACK);
+            g.fillRect(0,0,1000,700);
+        }
 
 
 
@@ -98,10 +119,18 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     public void moveThings(){
         GeoMan1.move();
+        GeoMan1.move2();
+        for (int i = 0; i < obstacles.length; i++) {
+            obstacles[i].move(speed);
+        }
     }
 
     public void checkIntersections(){
-
+        for (int i = 0; i < obstacles.length; i++) {
+            if(GeoMan1.rec.intersects(obstacles[i].rec)){
+                gameOver = true;
+            }
+        }
     }
 
 
@@ -130,12 +159,15 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 //            GeoMan1.down = true;
 //        }
 //        if (keyCode == 65)
-//            GeoMan1.left = true;
+//            GeoMmman1.left = true;
 //        if (keyCode == 87){
 //            GeoMan1.up = true;
 //        }
         if (keyCode == 32){
-            GeoMan1.dy= -(GeoMan1.xpos+30)/(GeoMan1.ypos+30)* GeoMan1.dx;
+            if(GeoMan1.canJump){
+                GeoMan1.dy= -15;
+            }
+
 
         }
     }
@@ -156,7 +188,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
         }
 
-}
+    }
 
 
 
